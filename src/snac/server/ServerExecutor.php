@@ -1076,7 +1076,7 @@ class ServerExecutor {
                 $item = array (
                         "id" => $constellation->getID(),
                         "version" => $constellation->getVersion(),
-                        "nameEntry" => $constellation->getPreferredNameEntry()->getOriginal()
+                        "nameEntry" => $constellation->getPreferredNameEntry() ? $constellation->getPreferredNameEntry()->getOriginal() : null
                 );
                 $this->logger->addDebug("User has checked out", $item);
                 array_push($response["editing"], $item);
@@ -1098,7 +1098,7 @@ class ServerExecutor {
                 $item = array (
                         "id" => $constellation->getID(),
                         "version" => $constellation->getVersion(),
-                        "nameEntry" => $constellation->getPreferredNameEntry()->getOriginal()
+                        "nameEntry" => $constellation->getPreferredNameEntry() ? $constellation->getPreferredNameEntry()->getOriginal() : null
                 );
                 $this->logger->addDebug("User was currently editing", $item);
                 array_push($response["editing_lock"], $item);
@@ -1120,7 +1120,7 @@ class ServerExecutor {
                 $item = array (
                         "id" => $constellation->getID(),
                         "version" => $constellation->getVersion(),
-                        "nameEntry" => $constellation->getPreferredNameEntry()->getOriginal()
+                        "nameEntry" => $constellation->getPreferredNameEntry() ? $constellation->getPreferredNameEntry()->getOriginal() : null
                 );
                 $this->logger->addDebug("User had for review", $item);
                 array_push($response["review_lock"], $item);
@@ -3741,9 +3741,9 @@ class ServerExecutor {
 
         return array("result" => "success");
     }
-    
+
     /**
-     * Parse EAC and return result 
+     * Parse EAC and return result
      *
      * Parses and EAC-CPF file given on the input and returns the SNAC JSON object
      * as well as any errors that occurred during the conversion process.
