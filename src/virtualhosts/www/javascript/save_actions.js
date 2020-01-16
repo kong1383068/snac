@@ -26,6 +26,10 @@ $(document).ready(function() {
     if($('#save_and_continue').exists()) {
         $('#save_and_continue').click(function(){
 
+            if (!validateTermFields()) {
+                return false;
+            }
+
         	// If EntityType and NameEntry do not have values, then don't let the user save
         	var noNameEntryText = true;
         	$("input[id^='nameEntry_original_']").each(function() {
@@ -191,6 +195,10 @@ $(document).ready(function() {
     if($('#save_and_dashboard').exists()) {
         $('#save_and_dashboard').click(function(){
 
+            if (!validateTermFields()) {
+                return false;
+            }
+
         	// If EntityType and NameEntry do not have values, then don't let the user save
         	var noNameEntryText = true;
         	$("input[id^='nameEntry_original_']").each(function() {
@@ -316,6 +324,10 @@ $(document).ready(function() {
     if($('#save_and_publish').exists()) {
         $('#save_and_publish').click(function(){
 
+            if (!validateTermFields()) {
+                return false;
+            }
+
         	// If EntityType and NameEntry do not have values, then don't let the user save or publish
         	var noNameEntryText = true;
         	$("input[id^='nameEntry_original_']").each(function() {
@@ -438,6 +450,11 @@ $(document).ready(function() {
     }
 
     function save_and_review(){
+
+        if (!validateTermFields()) {
+            return false;
+        }
+
         // If EntityType and NameEntry do not have values, then don't let the user save or publish
         var noNameEntryText = true;
         $("input[id^='nameEntry_original_']").each(function() {
@@ -561,6 +578,11 @@ $(document).ready(function() {
     }
 
     function save_and_send_editor(){
+
+        if (!validateTermFields()) {
+            return false;
+        }
+
         // If EntityType and NameEntry do not have values, then don't let the user save or publish
         var noNameEntryText = true;
         $("input[id^='nameEntry_original_']").each(function() {
@@ -798,6 +820,10 @@ $(document).ready(function() {
     if($('#continue_and_reconcile').exists()) {
         $('#continue_and_reconcile').click(function(){
 
+            if (!validateTermFields()) {
+                return false;
+            }
+
             // If EntityType and NameEntry do not have values, then don't let the user save
             var noNameEntryText = true;
             $("input[id^='nameEntry_original_']").each(function() {
@@ -1019,5 +1045,32 @@ function updateNameEntryPanelToPreferred(numbers) {
             $("#nameEntry_preferenceScore_" + number).val('checked');
             $("#checkbox_nameEntry_preferenceScore_" + number).find("p").html("Preferred");
         });
+    }
+}
+
+/**
+ * Validate Term Fields
+ *
+ * Validates that there are no edited components to be saved with empty term fields.
+ *
+ * @param Boolean True if valid, else false.
+ */
+function validateTermFields() {
+    var emptyTermCount = $(".edited-component select[id*='term']")
+        .find("option:selected").filter( function() {
+                return this.value == '';
+            }).length;
+    if (emptyTermCount > 0) {
+        var plural = emptyTermCount > 1 ? "s" : "";
+        $('#error-message').html(`<p>You have ${emptyTermCount} empty term field${plural}. Please enter a valid value for each term field and save again.</p>`);
+        setTimeout(function(){
+            $('#error-message').slideDown();
+        }, 500);
+        setTimeout(function(){
+            $('#error-message').slideUp();
+        }, 10000);
+        return false;
+    } else {
+        return true;
     }
 }
