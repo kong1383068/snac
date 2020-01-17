@@ -26,27 +26,9 @@ $(document).ready(function() {
     if($('#save_and_continue').exists()) {
         $('#save_and_continue').click(function(){
 
-            if (!validateTermFields()) {
+            if (!validateTermFields() || !validateEntityTypeAndNameEntry()) {
                 return false;
             }
-
-        	// If EntityType and NameEntry do not have values, then don't let the user save
-        	var noNameEntryText = true;
-        	$("input[id^='nameEntry_original_']").each(function() {
-        		if ($(this).val() != "")
-        			noNameEntryText = false;
-        	});
-        	if ($('#entityType').val() == "" || noNameEntryText) {
-        		$('#error-message').html("<p>Entity Type and at least one Name Entry required for saving.</p>");
-                setTimeout(function(){
-                    $('#error-message').slideDown();
-                }, 500);
-                setTimeout(function(){
-                    $('#error-message').slideUp();
-                }, 10000);
-        		return false;
-        	}
-
 
         	// If nothing has changed, alert the user and do nothing
         	if (somethingHasBeenEdited == false) {
@@ -195,26 +177,9 @@ $(document).ready(function() {
     if($('#save_and_dashboard').exists()) {
         $('#save_and_dashboard').click(function(){
 
-            if (!validateTermFields()) {
+            if (!validateTermFields() || !validateEntityTypeAndNameEntry()) {
                 return false;
             }
-
-        	// If EntityType and NameEntry do not have values, then don't let the user save
-        	var noNameEntryText = true;
-        	$("input[id^='nameEntry_original_']").each(function() {
-        		if ($(this).val() != "")
-        			noNameEntryText = false;
-        	});
-        	if ($('#entityType').val() == "" || noNameEntryText) {
-        		$('#error-message').html("<p>Entity Type and at least one Name Entry required for saving.</p>");
-                setTimeout(function(){
-                    $('#error-message').slideDown();
-                }, 500);
-                setTimeout(function(){
-                    $('#error-message').slideUp();
-                }, 10000);
-        		return false;
-        	}
 
         	// If nothing has changed, alert the user and unlock
         	if (somethingHasBeenEdited == false) {
@@ -324,26 +289,9 @@ $(document).ready(function() {
     if($('#save_and_publish').exists()) {
         $('#save_and_publish').click(function(){
 
-            if (!validateTermFields()) {
+            if (!validateTermFields() || !validateEntityTypeAndNameEntry()) {
                 return false;
             }
-
-        	// If EntityType and NameEntry do not have values, then don't let the user save or publish
-        	var noNameEntryText = true;
-        	$("input[id^='nameEntry_original_']").each(function() {
-        		if ($(this).val() != "")
-        			noNameEntryText = false;
-        	});
-        	if ($('#entityType').val() == "" || noNameEntryText) {
-        		$('#error-message').html("<p>Entity Type and at least one Name Entry required for saving.</p>");
-                setTimeout(function(){
-                    $('#error-message').slideDown();
-                }, 500);
-                setTimeout(function(){
-                    $('#error-message').slideUp();
-                }, 10000);
-        		return false;
-        	}
 
         	// If nothing has changed, alert the user and publish
         	if (somethingHasBeenEdited == false) {
@@ -451,24 +399,7 @@ $(document).ready(function() {
 
     function save_and_review(){
 
-        if (!validateTermFields()) {
-            return false;
-        }
-
-        // If EntityType and NameEntry do not have values, then don't let the user save or publish
-        var noNameEntryText = true;
-        $("input[id^='nameEntry_original_']").each(function() {
-            if ($(this).val() != "")
-                noNameEntryText = false;
-        });
-        if ($('#entityType').val() == "" || noNameEntryText) {
-            $('#error-message').html("<p>Entity Type and at least one Name Entry required for saving.</p>");
-            setTimeout(function(){
-                $('#error-message').slideDown();
-            }, 500);
-            setTimeout(function(){
-                $('#error-message').slideUp();
-            }, 10000);
+        if (!validateTermFields() || !validateEntityTypeAndNameEntry()) {
             return false;
         }
 
@@ -579,24 +510,7 @@ $(document).ready(function() {
 
     function save_and_send_editor(){
 
-        if (!validateTermFields()) {
-            return false;
-        }
-
-        // If EntityType and NameEntry do not have values, then don't let the user save or publish
-        var noNameEntryText = true;
-        $("input[id^='nameEntry_original_']").each(function() {
-            if ($(this).val() != "")
-                noNameEntryText = false;
-        });
-        if ($('#entityType').val() == "" || noNameEntryText) {
-            $('#error-message').html("<p>Entity Type and at least one Name Entry required for saving.</p>");
-            setTimeout(function(){
-                $('#error-message').slideDown();
-            }, 500);
-            setTimeout(function(){
-                $('#error-message').slideUp();
-            }, 10000);
+        if (!validateTermFields() || !validateEntityTypeAndNameEntry()) {
             return false;
         }
 
@@ -820,28 +734,9 @@ $(document).ready(function() {
     if($('#continue_and_reconcile').exists()) {
         $('#continue_and_reconcile').click(function(){
 
-            if (!validateTermFields()) {
+            if (!validateTermFields() || !validateEntityTypeAndNameEntry()) {
                 return false;
             }
-
-            // If EntityType and NameEntry do not have values, then don't let the user save
-            var noNameEntryText = true;
-            $("input[id^='nameEntry_original_']").each(function() {
-                if ($(this).val() != "")
-                noNameEntryText = false;
-            });
-            if ($('#entityType').val() == "" || noNameEntryText) {
-                $('#error-message').html("<p>Entity Type and at least one Name Entry required for continuing.</p>");
-                setTimeout(function(){
-                    $('#error-message').slideDown();
-                }, 500);
-                setTimeout(function(){
-                    $('#error-message').slideUp();
-                }, 10000);
-                return false;
-            }
-
-
 
             // Open up the warning alert box and note that we are saving
             $('#notification-message').html("<p>Reconciling Constellation... Please wait.</p>");
@@ -1063,10 +958,37 @@ function validateTermFields() {
     if (emptyTermCount > 0) {
         var plural = emptyTermCount > 1 ? "s" : "";
         $('#error-message').html(`<p>You have ${emptyTermCount} empty term field${plural}. Please enter a valid value for each term field and save again.</p>`);
-        setTimeout(function(){
+        setTimeout(function() {
             $('#error-message').slideDown();
         }, 500);
-        setTimeout(function(){
+        setTimeout(function() {
+            $('#error-message').slideUp();
+        }, 10000);
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/**
+ * Validate EntityType And NameEntry
+ *
+ * If EntityType and NameEntry do not have values, then don't let the user save or publish
+ *
+ * @param Boolean True if valid, else false
+ */
+function validateEntityTypeAndNameEntry() {
+    var noNameEntryText = true;
+    $("input[id^='nameEntry_original_']").each(function() {
+        if ($(this).val() != "")
+            noNameEntryText = false;
+    });
+    if ($('#entityType').val() == "" || noNameEntryText) {
+        $('#error-message').html("<p>Entity Type and at least one Name Entry required for saving.</p>");
+        setTimeout(function() {
+            $('#error-message').slideDown();
+        }, 500);
+        setTimeout(function() {
             $('#error-message').slideUp();
         }, 10000);
         return false;
